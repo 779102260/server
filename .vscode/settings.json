@@ -1,0 +1,14 @@
+{
+    "editor.tabSize": 4, // tab缩进
+    "editor.formatOnSave": false,
+    // JS （配置eslint一起使用）
+    // 保存时调用eslint插件格式化
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    // eslint配置：匹配的文件类型
+    "eslint.validate": [
+      "javascript",
+      "typescript",
+    ]
+  }
