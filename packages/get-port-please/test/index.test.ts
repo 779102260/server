@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getPort } from '../index'
+import { getPort } from '../src/index'
 import { createServer } from 'node:net'
 
 describe('getPort', () => {

@@ -1,14 +1,12 @@
 {
     "compilerOptions": {
-      "target": "ES6",
-      "module": "ESNext",
+      "target": "ESNext",
+      "module": "CommonJS",
       "moduleResolution": "Node",
       "esModuleInterop": true,
-      "outDir": "dist",
       "strict": true,
       "declaration": true,
-      "resolveJsonModule": true,
-      "types": ["node"]
+      "resolveJsonModule": true
     },
     "include": ["packages"]
 }

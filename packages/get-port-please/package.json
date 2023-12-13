@@ -1,9 +1,10 @@
 {
-  "name": "get-port-please",
+  "name": "@yangsansuan/get-port-please",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "rimraf dist && tsc"
   },
   "keywords": [],
   "author": "",
