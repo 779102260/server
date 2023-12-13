@@ -21,7 +21,7 @@ describe('getPort', () => {
         close()
     })
 
-    it.only('should return random port', async () => {
+    it('should return random port', async () => {
         // 占用3000端口
         const close = await usePort(3000)
         const port = await getPort(3000)
