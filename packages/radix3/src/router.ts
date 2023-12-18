@@ -63,6 +63,12 @@ export class Router {
             }
             node = childNode
             // 路由参数
+            if (node.type === NODE_TYPES.NORMAL) {
+                continue
+            }
+            if (node.type === NODE_TYPES.MIXED) {
+                // dynamicParams[node.paramNameMatcher] = item
+            }
         }
         return node.data
     }
