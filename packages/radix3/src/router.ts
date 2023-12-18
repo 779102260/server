@@ -1,9 +1,12 @@
-import { createRadixNode, NODE_TYPES, RadixNode, getNodeType } from './radix'
+import { createRadixNode, getNodeParamNameMatcher, RadixNode, getNodeType, NODE_TYPES } from './radix'
 
 export class Router {
+    // 路由规则
     routes: Record<string, any> = {}
+    // 静态路由
     staticRoutesMap: Record<string, any> = {}
-    rooutNode: RadixNode = createRadixNode()
+    // radix树
+    rootNode: RadixNode = createRadixNode()
 
     constructor(routes: Record<string, any>) {
         this.routes = routes
@@ -12,7 +15,8 @@ export class Router {
     insert(path: string, data: any) {
         const sections = path.split('/')
 
-        let node = this.rooutNode
+        let node = this.rootNode
+        let isStatic = true
         for (const item of sections) {
             const childNode = node.children?.get(item)
             /** 已存在 */
@@ -22,18 +26,46 @@ export class Router {
             }
             /** 新增 */
             const type = getNodeType(item)
+            if (type !== NODE_TYPES.NORMAL) {
+                isStatic = false
+            }
+            const paramNameMatcher = getNodeParamNameMatcher(item)
             const newChild = createRadixNode({
                 type,
                 parent: node,
+                paramNameMatcher,
             })
             node.children?.set(item, newChild)
-            // 泛类型
-            if (type === NODE_TYPES.WILDCARD) {
-                // TODO
-            }
+        }
+        // data放到最后的叶子节点上，查询时表示终点
+        node.data = data
+        // 静态路由存储map中，它的优先级更高，匹配速度更快
+        if (!isStatic) {
+            this.staticRoutesMap[path] = data
         }
     }
-    lookup(path: string) {}
+
+    lookup(path: string) {
+        /** 优先从静态路由中查找 */
+        const staticRoute = this.staticRoutesMap[path]
+        if (staticRoute) {
+            return staticRoute
+        }
+        /** radix树查询 */
+        const sections = path.split('/')
+        let node = this.rootNode
+        const dynamicParams: Record<string, string> = {}
+        for (const item of sections) {
+            const childNode = node.children?.get(item)
+            // 不存在的路由
+            if (!childNode) {
+                return null
+            }
+            node = childNode
+            // 路由参数
+        }
+        return node.data
+    }
     remove(path: string) {}
 }
 
