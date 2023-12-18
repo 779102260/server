@@ -1,0 +1,12 @@
+{
+  "name": "@yangsansuan/radix3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "ISC"
+}
