@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash-es'
 import { createRadixNode, getNodeParamNameMatcher, RadixNode, getNodeType, NODE_TYPES } from './radix'
 import { normalizeTrailingSlash } from './util'
 
@@ -31,7 +32,7 @@ export class Router {
         /** 插入radix tree */
         let node = this.rootNode
         let isStatic = true
-        const sections = path.split('/').filter(Boolean)
+        const sections = path.split('/')
         for (const item of sections) {
             const childNode = node.children?.get(item)
             /** 已存在 */
@@ -41,9 +42,6 @@ export class Router {
             }
             /** 新增 */
             const type = getNodeType(item)
-            if (type !== NODE_TYPES.NORMAL) {
-                isStatic = false
-            }
             const paramNameMatcher = getNodeParamNameMatcher(item)
             const newChild = createRadixNode({
                 type,
@@ -51,6 +49,14 @@ export class Router {
                 paramNameMatcher,
             })
             node.children?.set(item, newChild)
+            if (type === NODE_TYPES.WILDCARD) {
+                node.wildcardChildNode = newChild
+                isStatic = false
+            } else if (type === NODE_TYPES.PLACEHOLDER) {
+                node.placeholderChildNode = newChild
+                isStatic = false
+            }
+            node = newChild
         }
         // data放到最后的叶子节点上
         node.data = data
@@ -68,38 +74,53 @@ export class Router {
             return staticRoute
         }
         /** radix树查询 */
-        const sections = path.split('/').filter(Boolean)
+        const sections = path.split('/')
         let node = this.rootNode
         let dynamicParams: Record<string, string> = {}
-        for (const item of sections) {
-            // children的key改成正则吧
-            const childNode = node.children?.get(item)
-            // 不存在的路由
-            if (!childNode) {
-                return null
-            }
-            node = childNode
-            // 路由参数
-            if (node.type === NODE_TYPES.NORMAL) {
+        for (let i = 0; i < sections.length; i++) {
+            const item = sections[i]
+            const { wildcardChildNode, placeholderChildNode, children } = node
+            // 普通节点
+            const childNode = children?.get(item)
+            console.log(111, item, childNode)
+            if (childNode) {
+                node = childNode
                 continue
             }
-            if (node.type === NODE_TYPES.MIXED) {
-                const params = item.match(node.paramNameMatcher as RegExp)
-                dynamicParams = { ...params?.groups, ...dynamicParams }
+            console.log(222, placeholderChildNode, wildcardChildNode)
+            // 子节点是动态节点
+            if (placeholderChildNode) {
+                node = placeholderChildNode
+                if (node.type === NODE_TYPES.PLACEHOLDER) {
+                    dynamicParams[node.paramNameMatcher as string] = item
+                } else {
+                    const params = item.match(node.paramNameMatcher as RegExp)
+                    dynamicParams = { ...params?.groups, ...dynamicParams }
+                }
                 continue
             }
-            // WILDCARD PLACEHOLDER
-            const paramName = node.paramNameMatcher
-            dynamicParams[paramName as string] = item
+            // 子节点是泛节点：后面不需要再匹配了
+            if (wildcardChildNode) {
+                node = wildcardChildNode
+                dynamicParams[node.paramNameMatcher as string] = sections.slice(i).join('/')
+                break
+            }
+
+            console.log(333)
+            return null
         }
 
+        // 查找的路由是完整路由的一部分
         if (!node.data) {
-            console.error('代码有问题')
+            return null
         }
 
-        return { ...node.data, params: dynamicParams }
+        const data: Record<string, any> = { ...node.data }
+        if (!isEmpty(dynamicParams)) {
+            data.params = dynamicParams
+        }
+        return data
     }
-
     // 需要这个？
     remove(path: string) {}
 }

@@ -8,5 +8,8 @@
     "test": "vitest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  }
 }

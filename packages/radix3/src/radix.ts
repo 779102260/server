@@ -50,14 +50,15 @@ export function getNodeType(str: string) {
 /**
  * 获取动态参数名称
  */
-let dynamicParamCount = 0
+let dynamicParamCount = -1
 export function getNodeParamNameMatcher(str: string) {
     const type = getNodeType(str)
     if (type === NODE_TYPES.NORMAL) {
         return undefined
     }
     if (type === NODE_TYPES.WILDCARD) {
-        const paramName = str.slice(3) ?? '_'
+        const paramName = str.slice(3) || '_'
+        console.log('paramName', str, paramName)
         return paramName
     }
     if (type === NODE_TYPES.PLACEHOLDER) {
@@ -90,4 +91,8 @@ export type RadixNode = {
     data?: { params?: never; [key: string]: any }
     /** 动态参数名称 */
     paramNameMatcher?: string | RegExp
+    /** 包含了一个泛子节点 */
+    wildcardChildNode?: RadixNode
+    /** 包含了一个动态子节点 */
+    placeholderChildNode?: RadixNode
 }
