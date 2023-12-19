@@ -14,7 +14,7 @@ export const NODE_TYPES = {
  * @param options
  * @returns
  */
-export function createRadixNode(options?: RadixNode): RadixNode {
+export function createRadixNode(options?: Partial<RadixNode>): RadixNode {
     return {
         type: options?.type || NODE_TYPES.NORMAL,
         parent: options?.parent,
@@ -36,11 +36,12 @@ export function getNodeType(str: string) {
     if (str.startsWith('**')) {
         return NODE_TYPES.WILDCARD
     }
+    const nameFlag = str.includes(':')
     const params = [...str.matchAll(PARAMS_RE)].map((i) => i[0])
-    if (params.length === 1) {
+    if (str === '*' || (nameFlag && params.length === 1)) {
         return NODE_TYPES.PLACEHOLDER
     }
-    if (params.length > 1) {
+    if (nameFlag && params.length > 1) {
         return NODE_TYPES.MIXED
     }
     return NODE_TYPES.NORMAL
@@ -68,10 +69,8 @@ export function getNodeParamNameMatcher(str: string) {
         return paramName
     }
     if (type === NODE_TYPES.MIXED) {
-        const sectionRegexString = str.replace(
-            /:(\w+)/g,
-            (_, id) => `(?<${id}>\\w+)` // 正则命名捕获组，方便后面使用
-        )
+        // 正则命名捕获组，方便后面使用
+        const sectionRegexString = str.replace(/:(\w+)/g, (_, id) => `(?<${id}>\\w+)`)
         return new RegExp(`^${sectionRegexString}$`)
     }
 }
@@ -86,7 +85,7 @@ export type RadixNode = {
     /** 父节点 */
     parent?: RadixNode
     /** 子节点 */
-    children?: Map<string, RadixNode>
+    children: Map<string, RadixNode>
     /** 路由数据，一般包含路由处理函数handler等 */
     data?: { params?: never; [key: string]: any }
     /** 动态参数名称 */
