@@ -52,7 +52,7 @@ export class Router {
             if (type === NODE_TYPES.WILDCARD) {
                 node.wildcardChildNode = newChild
                 isStatic = false
-            } else if (type === NODE_TYPES.PLACEHOLDER) {
+            } else if (type === NODE_TYPES.PLACEHOLDER || type === NODE_TYPES.MIXED) {
                 node.placeholderChildNode = newChild
                 isStatic = false
             }
@@ -69,6 +69,7 @@ export class Router {
     /** 查找路由 */
     lookup(path: string) {
         /** 优先从静态路由中查找 */
+        path = normalizeTrailingSlash(path)
         const staticRoute = this.staticRoutesMap[path]
         if (staticRoute) {
             return staticRoute
