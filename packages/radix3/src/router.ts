@@ -88,7 +88,6 @@ export class Router {
                 node = childNode
                 continue
             }
-            console.log(222, placeholderChildNode, wildcardChildNode)
             // 子节点是动态节点
             if (placeholderChildNode) {
                 node = placeholderChildNode
@@ -106,8 +105,6 @@ export class Router {
                 dynamicParams[node.paramNameMatcher as string] = sections.slice(i).join('/')
                 break
             }
-
-            console.log(333)
             return null
         }
 
