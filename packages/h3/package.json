@@ -9,7 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "vitest": "^1.0.4"
+  "dependencies": {
+    "@yangsansuan/radix3": "workspace:*"
   }
 }

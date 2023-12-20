@@ -55,10 +55,10 @@ importers:
   packages/get-port-please: {}
 
   packages/h3:
-    devDependencies:
-      vitest:
-        specifier: ^1.0.4
-        version: 1.0.4(@types/node@18.19.3)
+    dependencies:
+      '@yangsansuan/radix3':
+        specifier: workspace:*
+        version: link:../radix3
 
   packages/radix3:
     dependencies:

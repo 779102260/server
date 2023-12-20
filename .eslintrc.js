@@ -18,6 +18,7 @@ module.exports = {
                 singleQuote: true,
             },
         ],
+        'no-undef': 'off',
         'no-unused-vars': process.env.NODE_ENV === 'production' ? 'error' : 'off', // 定义但未使用的变量
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off', // 生产时无console语句
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off', // 生产时无debugger关键字
