@@ -11,11 +11,9 @@ type HttpMethodFunctions = {
 class ServerRouter extends Router implements HttpMethodFunctions {
     constructor(routes: Record<string, any> = {}) {
         super(routes)
-        HttpMethods.forEach((method) => {
-            this[method] = (path: string, handler: Function) => {
-                return this.addRoute(method, path, handler)
-            }
-        })
+        for (const m of HttpMethods) {
+            this[m] = () => this.add()
+        }
     }
     add() {}
     handler() {}
