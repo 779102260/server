@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash-es'
+import isEmpty from 'lodash/isEmpty'
 import { createRadixNode, getNodeParamNameMatcher, RadixNode, getNodeType, NODE_TYPES } from './radix'
 import { normalizeTrailingSlash } from './util'
 
