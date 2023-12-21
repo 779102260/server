@@ -52,6 +52,7 @@ function createAppEventHandler(stack: Stack) {
         }
     }
 }
+
 async function handleHandlerResponse(event: H3Event, val: any) {
     const valType = typeof val
     // 返回字符串(text/html)
@@ -69,6 +70,7 @@ async function handleHandlerResponse(event: H3Event, val: any) {
     throw new Error('500')
 }
 
+// TODO 改为紧支持中间件
 function use(app: App, path: string, handler: Handler) {
     app.stack.push({
         route: path,
