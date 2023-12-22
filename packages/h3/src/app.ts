@@ -10,9 +10,9 @@ type Stack = Layer[]
 export type IApp = ReturnType<typeof createApp>
 
 /**
- * 原理
- * 1. use添加插件到stack
- * 2. handler在请求触发时，遍历stack，匹配后执行pstack.handler
+ * Server App实例
+ * 只包含处理响应逻辑，其他功能依赖插件系统完成（比如router）
+ * // TODO 洋葱模型更好些？
  */
 class App {
     /** 路由队列 */
