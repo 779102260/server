@@ -4,9 +4,11 @@ import { H3Event } from './event/event'
 const HttpMethods = ['connect', 'delete', 'get', 'head', 'options', 'post', 'put', 'trace', 'patch'] as const
 type IHttpMethods = (typeof HttpMethods)[number]
 
-// 定义一个映射类型，为每个 HTTP 方法创建一个函数类型
+/** 路由处理函数，H3Event会注入matchedRoute和params */
+export type RouteHandler = (event: H3Event) => any
+/** 定义一个映射类型，为每个 HTTP 方法创建一个函数类型 */
 type HttpMethodFunctions = {
-    [Method in IHttpMethods]: (path: string, handler: Function) => void
+    [Method in IHttpMethods]: (path: string, handler: RouteHandler) => ServerRouter
 }
 
 /**
@@ -14,18 +16,18 @@ type HttpMethodFunctions = {
  * - 扩展get post等方法添加对应method路由
  */
 class ServerRouter extends Router implements HttpMethodFunctions {
-    connect = (path: string, handler: Function) => this.add(path, handler, 'connect')
-    delete = (path: string, handler: Function) => this.add(path, handler, 'delete')
-    get = (path: string, handler: Function) => this.add(path, handler, 'get')
-    head = (path: string, handler: Function) => this.add(path, handler, 'head')
-    options = (path: string, handler: Function) => this.add(path, handler, 'options')
-    post = (path: string, handler: Function) => this.add(path, handler, 'post')
-    put = (path: string, handler: Function) => this.add(path, handler, 'put')
-    trace = (path: string, handler: Function) => this.add(path, handler, 'trace')
-    patch = (path: string, handler: Function) => this.add(path, handler, 'patch')
+    connect = (path: string, handler: RouteHandler) => this.add(path, handler, 'connect')
+    delete = (path: string, handler: RouteHandler) => this.add(path, handler, 'delete')
+    get = (path: string, handler: RouteHandler) => this.add(path, handler, 'get')
+    head = (path: string, handler: RouteHandler) => this.add(path, handler, 'head')
+    options = (path: string, handler: RouteHandler) => this.add(path, handler, 'options')
+    post = (path: string, handler: RouteHandler) => this.add(path, handler, 'post')
+    put = (path: string, handler: RouteHandler) => this.add(path, handler, 'put')
+    trace = (path: string, handler: RouteHandler) => this.add(path, handler, 'trace')
+    patch = (path: string, handler: RouteHandler) => this.add(path, handler, 'patch')
 
-    constructor(routes: Record<string, any> = {}) {
-        super(routes)
+    constructor() {
+        super()
     }
 
     /**
@@ -34,7 +36,7 @@ class ServerRouter extends Router implements HttpMethodFunctions {
      * @param handler 处理函数
      * @param method HTTP 方法
      */
-    add(path: string, handler: Function, method: IHttpMethods | IHttpMethods[] | 'all' = 'all') {
+    add(path: string, handler: RouteHandler, method: IHttpMethods | IHttpMethods[] | 'all' = 'all') {
         /** 参数处理 */
         const methods = Array.isArray(method) ? method : [method]
 
@@ -44,6 +46,7 @@ class ServerRouter extends Router implements HttpMethodFunctions {
             data[m] = handler
         })
         this.insert(path, data)
+        return this
     }
 
     /**
@@ -67,11 +70,16 @@ class ServerRouter extends Router implements HttpMethodFunctions {
             return
         }
 
+        /** 注入上下文 */
+        event.context.matchedRoute = matched
+        event.context.params = matched.params ?? {}
+
         /** 执行路由函数 */
         return handler(event)
     }
 }
 
-export function createRouter(routes: Record<string, any> = {}) {
-    return new ServerRouter(routes)
+export function createRouter() {
+    const router = new ServerRouter()
+    return router
 }

@@ -1,80 +1,71 @@
-import { send } from './util/reponse'
 import { MIMES } from './util/consts'
 import type { H3Event } from './event/event'
+import type { RouteHandler } from './router'
 
-/** 路由处理函数 */
-type Handler = (event: H3Event) => any
-/** 路由配置 */
-type Layer = {
-    route: string
-    handler: Handler
-}
-/** 路由队列 */
+/** 插件  */
+type Layer = RouteHandler | { handler: RouteHandler; [key: string]: any }
+/** 插件队列 */
 type Stack = Layer[]
 /** app */
-export type App = ReturnType<typeof createApp>
+export type IApp = ReturnType<typeof createApp>
 
 /**
  * 原理
- * 1. use添加路由到stack
+ * 1. use添加插件到stack
  * 2. handler在请求触发时，遍历stack，匹配后执行pstack.handler
  */
-export function createApp() {
-    const stack: Stack = []
-    const appEventHandler = createAppEventHandler(stack)
+class App {
+    /** 路由队列 */
+    stack: Stack = []
 
-    const app = {
-        /** 路由队列 */
-        stack,
-        /** 添加路由 */
-        use: (path: string, handler: Handler) => use(app, path, handler),
-        /** 处理路由 */
-        handler: appEventHandler,
+    /** 添加插件，这里移除了代码中的支持路由功能，所有功能通过插件实现 */
+    use(layer: Layer) {
+        this.stack.push(layer)
+        return this
     }
-    return app
-}
 
-function createAppEventHandler(stack: Stack) {
-    /** 匹配路由并执行 */
-    return async (event: H3Event) => {
-        // 获取path
-        const _reqPath = event.node.req.url
-        console.log('请求路径', _reqPath)
+    /** 路由处理函数 */
+    async handler(event: H3Event) {
         // 遍历stack
-        for (const layer of stack) {
-            if (layer.route !== _reqPath) {
-                continue
-            }
+        for (const layer of this.stack) {
             // 执行handler
-            const body = await layer.handler(event)
+            const handler = typeof layer === 'function' ? layer : layer.handler.bind(layer)
+            const body = await handler(event)
             // 响应
-            await handleHandlerResponse(event, body)
+            await this.handleHandlerResponse(event, body)
         }
     }
+
+    /** 处理响应 */
+    protected handleHandlerResponse(event: H3Event, val: any) {
+        const valType = typeof val
+        // 返回字符串(text/html)
+        if (valType === 'string') {
+            return this.send(event, val, MIMES.html)
+        }
+        // 返回json
+        if (valType === 'object') {
+            return this.send(event, JSON.stringify(val), MIMES.json)
+        }
+        // 返回stream
+        // 500
+        // TODO 错误状态码有点复杂，一会再搞
+        throw new Error('500')
+    }
+
+    /** 发送响应数据 */
+    protected send(event: H3Event, data?: string, type?: string) {
+        if (type) {
+            event.node.res.setHeader('Content-Type', type)
+        }
+        return event.node.res.end(data)
+    }
 }
 
-async function handleHandlerResponse(event: H3Event, val: any) {
-    const valType = typeof val
-    // 返回字符串(text/html)
-    if (valType === 'string') {
-        return send(event, val, MIMES.html)
-    }
-    // 返回json
-    if (valType === 'object') {
-        return send(event, JSON.stringify(val), MIMES.json)
-    }
-    // 返回stream
-
-    // 500
-    // TODO 错误状态码有点复杂，一会再搞
-    throw new Error('500')
-}
-
-// TODO 改为紧支持中间件
-function use(app: App, path: string, handler: Handler) {
-    app.stack.push({
-        route: path,
-        handler,
-    })
+/**
+ * 创建App实例
+ */
+export function createApp() {
+    const app = new App()
     return app
 }

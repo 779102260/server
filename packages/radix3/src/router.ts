@@ -10,10 +10,10 @@ export class Router {
     // radix树
     rootNode: RadixNode = createRadixNode()
 
-    constructor(routes: Record<string, any>) {
+    constructor(routes: Record<string, any> = {}) {
         this.routes = routes
         for (const path in routes) {
-            if (Object.prototype.toString.call(routes[path]) !== '[object Object]') {
+            if (!Object.prototype.hasOwnProperty.call(routes, path)) {
                 continue
             }
             this.insert(path, routes[path])
@@ -83,7 +83,6 @@ export class Router {
             const { wildcardChildNode, placeholderChildNode, children } = node
             // 普通节点
             const childNode = children?.get(item)
-            console.log(111, item, childNode)
             if (childNode) {
                 node = childNode
                 continue
