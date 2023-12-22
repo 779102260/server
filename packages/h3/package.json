@@ -1,8 +1,8 @@
 {
-  "name": "h3",
+  "name": "@yangsansuan/h3",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "vitest"

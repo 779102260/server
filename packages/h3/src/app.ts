@@ -14,7 +14,7 @@ export type IApp = ReturnType<typeof createApp>
  * 只包含处理响应逻辑，其他功能依赖插件系统完成（比如router）
  * // TODO 洋葱模型更好些？
  */
-class App {
+export class App {
     /** 路由队列 */
     stack: Stack = []
 
