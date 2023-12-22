@@ -50,7 +50,7 @@ export class App {
         // 返回stream
         // 500
         // TODO 错误状态码有点复杂，一会再搞
-        throw new Error('500')
+        // throw new Error('500')
     }
 
     /** 发送响应数据 */
