@@ -1,6 +1,6 @@
 {
   "name": "@yangsansuan/h3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.21",
     "@yangsansuan/radix3": "workspace:*"
   }
 }
