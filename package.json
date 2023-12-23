@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "publish": "sh publish.sh", 
     "lint": "eslint"
   },
   "keywords": [],
