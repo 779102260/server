@@ -13,10 +13,7 @@ import { createServer } from "node:http";
 import { createApp, eventHandler, toNodeListener } from "h3";
 
 const app = createApp();
-app.use(
-  "/",
-  () => "Hello world!",
-);
-
+const router = createServer().get("/", eventHandler(() => "Hello world!"));
+app.use(router);
 createServer(toNodeListener(app)).listen(3000);
 ```
