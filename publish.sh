@@ -1,9 +1,11 @@
 # 询问是否进入预发布模式
+pre_release_mode=false
 read -p "是否进入预发布模式? [y/n]" -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    changeset pre enter
+    changeset pre enter beta
+    pre_release_mode=true
 fi
 
 # 修改版本号
@@ -16,6 +18,12 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     changeset publish
+fi
+
+# 退出预发布模式
+if [[ "$pre_release_mode" == true ]]
+then
+    changeset pre exit
 fi
 
 # 提交
