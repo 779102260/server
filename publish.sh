@@ -7,6 +7,7 @@ then
 fi
 
 # 修改版本号
+changeset
 changeset version
 
 # 询问确认发布

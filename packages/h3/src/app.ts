@@ -49,7 +49,7 @@ export class App {
         }
         // 返回stream
         // 500
-        // TODO 错误状态码有点复杂，一会再搞
+        // TODO 错误状态码有点复杂，一会再搞1
         // throw new Error('500')
     }
 
