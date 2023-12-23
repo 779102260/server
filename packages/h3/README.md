@@ -6,6 +6,9 @@ minimal http framework
 ## Usage
 
 1. 安装
+```
+pnpm i @yangsansuan/h3
+```
 2. 使用
 
 ```ts

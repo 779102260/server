@@ -19,5 +19,6 @@ fi
 
 # 提交
 git add .
-git commit -m "publish"
+read -p "commit message: " message # 输入commit message
+git commit -m "$message"
 git push
