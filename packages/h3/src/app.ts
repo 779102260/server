@@ -1,6 +1,7 @@
-import { MIMES } from './util/consts'
+import { createError } from 'h3'
+import { createResponse, Response } from './plugin/response'
 import type { H3Event } from './event/event'
-import type { RouteHandler } from './router'
+import type { RouteHandler } from './plugin/router'
 
 /** 插件  */
 type Layer = RouteHandler | { handler: RouteHandler; [key: string]: any }
@@ -17,6 +18,12 @@ export type IApp = ReturnType<typeof createApp>
 export class App {
     /** 路由队列 */
     stack: Stack = []
+    /** 响应插件 */
+    response: Response
+
+    constructor(response?: Response) {
+        this.response = response ?? createResponse()
+    }
 
     /** 添加插件，这里移除了代码中的支持路由功能，所有功能通过插件实现 */
     use(layer: Layer) {
@@ -26,39 +33,26 @@ export class App {
 
     /** 路由处理函数 */
     async handler(event: H3Event) {
-        // 遍历stack
-        for (const layer of this.stack) {
-            // 执行handler
-            const handler = typeof layer === 'function' ? layer : layer.handler.bind(layer)
-            const body = await handler(event)
-            // 响应
-            await this.handleHandlerResponse(event, body)
+        try {
+            // 遍历stack
+            for (const layer of this.stack) {
+                // 执行handler
+                const handler = typeof layer === 'function' ? layer : layer.handler.bind(layer)
+                const body = await handler(event)
+                if (body) {
+                    // 响应
+                    await this.response.handler(event, body)
+                }
+                if (!event.handled) {
+                    throw createError({
+                        statusCode: 404,
+                        statusMessage: `Cannot find any path matching ${event.node.req.url || '/'}.`,
+                    })
+                }
+            }
+        } catch (error) {
+            this.response.sendError(event, error)
         }
-    }
-
-    /** 处理响应 */
-    protected handleHandlerResponse(event: H3Event, val: any) {
-        const valType = typeof val
-        // 返回字符串(text/html)
-        if (valType === 'string') {
-            return this.send(event, val, MIMES.html)
-        }
-        // 返回json
-        if (valType === 'object') {
-            return this.send(event, JSON.stringify(val), MIMES.json)
-        }
-        // 返回stream
-        // 500
-        // TODO 错误状态码有点复杂，一会再搞1
-        // throw new Error('500')
-    }
-
-    /** 发送响应数据 */
-    protected send(event: H3Event, data?: string, type?: string) {
-        if (type) {
-            event.node.res.setHeader('Content-Type', type)
-        }
-        return event.node.res.end(data)
     }
 }
 

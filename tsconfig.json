@@ -6,8 +6,9 @@
       "esModuleInterop": true,
       "strict": true,
       "declaration": true,
-      "resolveJsonModule": true
+      "resolveJsonModule": true,
+      "types": ["node"]
     },
-    "include": ["packages"]
+    "include": ["packages"],
 }
   

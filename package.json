@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "pnpm -F=./packages/* run build",
     "publish": "sh publish.sh", 
     "lint": "eslint"
   },

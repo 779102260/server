@@ -1,5 +1,6 @@
+import { createError } from 'h3'
 import { Router } from '@yangsansuan/radix3'
-import { H3Event } from './event/event'
+import type { H3Event } from '../../event/event'
 
 const HttpMethods = ['connect', 'delete', 'get', 'head', 'options', 'post', 'put', 'trace', 'patch'] as const
 type IHttpMethods = (typeof HttpMethods)[number]
@@ -65,10 +66,6 @@ class ServerRouter extends Router implements HttpMethodFunctions {
             return
         }
         const handler = matched[method] ?? matched.get ?? matched.all
-        if (!handler) {
-            console.error(`未匹配到路由对应的${method}方法`)
-            return
-        }
 
         /** 注入上下文 */
         event.context.matchedRoute = matched

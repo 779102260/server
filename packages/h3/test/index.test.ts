@@ -17,6 +17,9 @@ describe('createApp', () => {
         expect(await res.text()).toBe('hello')
         const res2 = await fetch('http://localhost:3000/hello/world')
         expect(await res2.text()).toBe('Hello world!')
+        // 404
+        const res3 = await fetch('http://localhost:3000/home2')
+        expect(res3.status).toBe(404)
         // 关闭服务
         server.close()
     })

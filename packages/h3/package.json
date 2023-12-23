@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.21",
-    "@yangsansuan/radix3": "workspace:*"
+    "@yangsansuan/radix3": "workspace:*",
+    "h3": "^1.9.0",
+    "lodash": "^4.17.21"
   }
 }
