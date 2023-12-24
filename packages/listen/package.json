@@ -1,8 +1,8 @@
 {
-  "name": "@yangsansuan/radix3",
+  "name": "@yangsansuan/listen",
   "version": "1.0.7",
   "description": "",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "vitest"
@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "@yangsansuan/get-port-please": "workspace:*"
+  },
+  "devDependencies": {
+    "@yangsansuan/h3": "workspace:^"
   }
 }

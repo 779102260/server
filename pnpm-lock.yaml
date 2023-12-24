@@ -72,6 +72,16 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
 
+  packages/listen:
+    dependencies:
+      '@yangsansuan/get-port-please':
+        specifier: workspace:*
+        version: link:../get-port-please
+    devDependencies:
+      '@yangsansuan/h3':
+        specifier: workspace:^
+        version: link:../h3
+
   packages/radix3:
     dependencies:
       lodash-es:
