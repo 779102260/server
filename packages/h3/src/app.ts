@@ -31,7 +31,7 @@ export class App {
         return this
     }
 
-    /** 路由处理函数 */
+    /** createServer处理函数 */
     async handler(event: H3Event) {
         try {
             // 遍历stack
