@@ -2,7 +2,7 @@
   "name": "@yangsansuan/listen",
   "version": "1.0.7",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "vitest"
