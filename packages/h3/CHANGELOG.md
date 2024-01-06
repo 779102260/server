@@ -1,5 +1,11 @@
 ## 1.0.5
 
+## 1.0.8
+
+### Patch Changes
+
+- @yangsansuan/radix3@1.0.8
+
 ## 1.0.7
 
 ### Patch Changes
