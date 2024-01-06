@@ -1,5 +1,11 @@
 # @yangsansuan/get-port-please
 
+## 1.0.9
+
+### Patch Changes
+
+- 发版 2
+
 ## 1.0.8
 
 ## 1.0.7
