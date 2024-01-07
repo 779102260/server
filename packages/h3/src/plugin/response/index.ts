@@ -2,6 +2,7 @@ import { splitCookiesString, isStream, sendStream, createError, isError } from '
 import { isWebResponse, MIMES } from './util'
 import type { Readable } from 'node:stream'
 import type { H3Event } from '../../event/event'
+import type { WebResponse } from '../../type'
 
 type IResponse = { body: any; [key: string]: any }
 type IResponseOption = {
@@ -110,6 +111,7 @@ export class Response {
     /** 发送另一个请求的Response */
     protected sendWebRespons(event: H3Event, response: WebResponse) {
         // copy header
+        // @ts-ignore
         for (const [key, value] of response.headers) {
             // set-cookie存在多个需要特殊处理
             if (key === 'set-cookie') {

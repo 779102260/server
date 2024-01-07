@@ -80,6 +80,9 @@ importers:
 
   packages/listen:
     dependencies:
+      '@yangsansuan/citty':
+        specifier: workspace:*
+        version: link:../citty
       '@yangsansuan/get-port-please':
         specifier: workspace:*
         version: link:../get-port-please

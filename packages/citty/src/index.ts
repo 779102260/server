@@ -11,7 +11,7 @@ export function defineCommond(config: ICmd) {
 /**
  * 运行命令行
  */
-export async function runCommond(cmd: ICmd, opts: { rawArgs?: string[] }) {
+export async function runCommond(cmd: ICmd, opts: { rawArgs?: string[] } = {}) {
     let result
     try {
         // -- 找到对应的命令 --
@@ -40,7 +40,7 @@ export async function runCommond(cmd: ICmd, opts: { rawArgs?: string[] }) {
  * @param opts 配置
  * @param opts.rawArgs 原始命令行参数（process.argv），比如二级命令
  */
-export function runMain(cmd: ICmd, opts: { rawArgs?: string[] }) {
+export function runMain(cmd: ICmd, opts: { rawArgs?: string[] } = {}) {
     // -- 处理入参 --
     const rawArgs = opts.rawArgs || process.argv.slice(2)
 

@@ -4,8 +4,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "",
+  "description": "创建一个node服务",
   "main": "dist/index.js",
+  "bin": {
+    "listen": "bin/index.js"
+  },
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "vitest"
@@ -13,7 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@yangsansuan/get-port-please": "workspace:*"
+    "@yangsansuan/get-port-please": "workspace:*",
+    "@yangsansuan/citty": "workspace:*"
   },
   "devDependencies": {
     "@yangsansuan/h3": "workspace:^"
