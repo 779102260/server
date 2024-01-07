@@ -1,5 +1,14 @@
 # @yangsansuan/listen
 
+## 1.0.10
+
+### Patch Changes
+
+- 支持命令行
+- Updated dependencies
+  - @yangsansuan/citty@1.0.10
+  - @yangsansuan/get-port-please@1.0.10
+
 ## 1.0.9
 
 ### Patch Changes

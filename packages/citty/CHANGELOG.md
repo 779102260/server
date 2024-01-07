@@ -1,5 +1,11 @@
 # @yangsansuan/citty
 
+## 1.0.10
+
+### Patch Changes
+
+- 支持命令行
+
 ## 1.0.9
 
 ### Patch Changes

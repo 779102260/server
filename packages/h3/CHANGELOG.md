@@ -1,5 +1,13 @@
 ## 1.0.5
 
+## 1.0.10
+
+### Patch Changes
+
+- 支持命令行
+- Updated dependencies
+  - @yangsansuan/radix3@1.0.10
+
 ## 1.0.9
 
 ### Patch Changes
