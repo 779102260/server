@@ -5,9 +5,14 @@
     "access": "public"
   },
   "description": "创建一个node服务",
-  "main": "dist/index.js",
   "bin": {
     "listen": "bin/index.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./test": "./dist/test.js",
+    "./cli": "./dist/cli/index.js"
   },
   "scripts": {
     "build": "rimraf dist && tsc",

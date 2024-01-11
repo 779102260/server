@@ -1,16 +1,12 @@
 import { defineCommond, runMain } from '@yangsansuan/citty'
 import { createApp, createStatic, toNodeListener } from '@yangsansuan/h3'
 import { listen } from '../index'
+import { getArgs, parseArgs } from './args'
 
 export const run = (meta: { name: string; description: string; version: string }) => {
     const cmd = defineCommond({
         meta,
-        args: {
-            port: {
-                type: 'string',
-                description: '端口号',
-            },
-        },
+        args: getArgs(),
         async run(context) {
             // -- 参数处理 --
             const { port } = context.options
@@ -26,3 +22,4 @@ export const run = (meta: { name: string; description: string; version: string }
     })
     runMain(cmd)
 }
+export { getArgs, parseArgs }

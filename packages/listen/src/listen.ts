@@ -1,8 +1,8 @@
 import http from 'node:http'
 import { promisify } from 'node:util'
 import { getPort } from '@yangsansuan/get-port-please'
-import { ListenOptions } from './type'
-import type { RequestListener, Server } from 'node:http'
+import type { ListenOptions } from './type'
+import type { RequestListener } from 'node:http'
 
 /** 启动一个服务 */
 export async function listen(handler: RequestListener, options?: ListenOptions) {

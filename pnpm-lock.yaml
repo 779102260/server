@@ -91,7 +91,17 @@ importers:
         specifier: workspace:^
         version: link:../h3
 
-  packages/nitro: {}
+  packages/nitro:
+    dependencies:
+      '@yangsansuan/citty':
+        specifier: workspace:*
+        version: link:../citty
+      '@yangsansuan/h3':
+        specifier: workspace:*
+        version: link:../h3
+      '@yangsansuan/listen':
+        specifier: workspace:*
+        version: link:../listen
 
   packages/radix3:
     dependencies:
