@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "pnpm -F=./packages/* run build",
-    "publish": "sh publish.sh", 
+    "publish": "sh publish.sh",
     "lint": "eslint"
   },
   "keywords": [],
@@ -29,6 +29,7 @@
     "vitest": "^1.0.4"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "@types/lodash-es": "^4.17.12",
+    "lodash-es": "^4.17.21"
   }
 }

@@ -1,19 +1,26 @@
 {
-  "name": "@yangsansuan/nitro",
+  "name": "@yangsansuan/nitropack",
   "version": "1.0.2",
   "publishConfig": {
     "access": "public"
   },
   "description": "",
+  "bin": {
+    "nitro": "bin/index.js"
+  },
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rimraf dist && tsc",
+    "test": "vitest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@yangsansuan/citty": "workspace:*",
     "@yangsansuan/h3": "workspace:*",
-    "@yangsansuan/listen": "workspace:*"
+    "@yangsansuan/listen": "workspace:*",
+    "c12": "^1.6.1",
+    "lodash-es": "^4.17.21",
+    "rollup": "^4.9.5"
   }
 }
